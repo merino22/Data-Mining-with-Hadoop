@@ -104,7 +104,7 @@ Luego creamos la carpeta donde guardaremos los inputs
 ```bash
 $ hadoop fs -mkdir /WordCount/Input
 ```
-Despues agregamos el input file con la data limpiada que obtuvimos en los pasos posteriores "Extracting important Data" y "Cleaning Data", con el siguiente comando:
+Despues agregamos el input file con la data limpiada que obtuvimos en los pasos anteriores "Extracting important Data" y "Cleaning Data", con el siguiente comando:
 ```bash
 $ hadoop fs -put <<Direccion del archivo limpio>> <<Direccion de HDFS>>
 
