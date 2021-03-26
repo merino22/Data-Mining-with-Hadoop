@@ -204,6 +204,7 @@ Si deseamos obtener la frecuencia de las palabras o pares de palabras, debemos e
 28        int linecount2 = 0;
 29        FileReader fr = new FileReader(f1);
 ```
+
 Este codigo puede ser adquirrido de los archivos subidos al portal.
 
 ---------
