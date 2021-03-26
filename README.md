@@ -84,7 +84,7 @@ $ cd home/user/hadoop-3.2.2/etc/hadoop/
 
 ### Ejecucion de MapReduce
 
-##### Start-up de HDFS
+#### Start-up de HDFS
 Navegue a la carpeta sbin localizado dentro de su distribucion de hadoop
 ```bash
 $ cd /home/user/hadoop-3.2.2/sbin/
@@ -94,7 +94,7 @@ Para iniciar Hadoop Namenodes, Datanodes, Secondary Namenodes, ResourcesManagers
 ```bash
 $ ./start-all.sh
 ```
-##### Ejecucion de WordCount
+#### Ejecucion de WordCount
 Creamos la carpeta donde estará localizado el input en el HDFS (Hadoop
 Distributed File System):
 ```bash
@@ -128,7 +128,7 @@ e.g.:
 $ hadoop fs -get /WordCount/Output/part-r-00000.txt /home/user/Project_Hadoop
 ```
 
-##### Ejecucion de WordCount2Freq
+#### Ejecucion de WordCount2Freq
 Creamos la carpeta donde estará localizado el input en el HDFS (Hadoop
 Distributed File System):
 ```bash
