@@ -1,5 +1,4 @@
-# Guia-Hadoop-Project
-# Proyecto de concurrencia 
+# Guia-Hadoop-Project 
 -----
 #### 📦 Paso a paso de la ejecucion del proyecto. 💻
 
