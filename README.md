@@ -189,6 +189,7 @@ $ cat /home/user/Project_Hadoop/SorteWordCount.txt
 -k : Para sortear por una columna en especifico.
 2n : Para sortear por la segunda columna.
 n  : Para indicar que es un valor numerico.
+
 -------
 
 ## Frecuencia de las palabras 
