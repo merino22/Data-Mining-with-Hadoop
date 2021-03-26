@@ -63,6 +63,7 @@ Para limpiar la data, debemos ejecutar el archivo de java llamado CleaningData, 
 $ cd /Project_Hadoop/Project_Hadoop/Config/
 ```
 Dentro del archivo subido al portal donde encontraremos los archivos ```core-site.mxl hdfs-site.xml yarn-site.xml mapred-site.xml```
+
 2 - Seleccionar y copiar los cuatro archivos.
 
 3 - Luego navegar en su sistema de archivos local a la carpeta donde tiene instalada su distribucion de hadoop, ingresar al directory donde se encuentran sus archivos de configuracion e.g.
