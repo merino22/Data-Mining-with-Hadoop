@@ -78,7 +78,7 @@ $ cd home/user/hadoop-3.2.2/etc/hadoop/
 
 > Para que un programa de mapeo & reducción tenga tiempos de ejecución eficiente, la proporción de la memoria que se le asigna al trabajo de reducción debe ser el doble que la del trabajo de mapeo.
 
-> La cantidad de memoria que se le asigna a heap de Java, es recomendable que sea de 1GB menos que lo que se le asignó al mapeo y a la reduccion(ya configurado en los archivos de brindados).
+> La cantidad de memoria que se le asigna a heap de Java, es recomendable que sea de 1GB menos que lo que se le asignó al mapeo y a la reduccion(ya configurado en los archivos brindados).
 
 ---
 
