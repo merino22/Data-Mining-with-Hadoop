@@ -1,212 +1,212 @@
-# Guia-Hadoop-Project 
+# Guide-Hadoop-Project
 -----
-#### 📦 Paso a paso de la ejecucion del proyecto. 💻
+#### 📦 Step by step of the project execution. 💻
 
 ## Download dataset
-Encontramos nuestro dataset en [Kaggle](https://www.kaggle.com/stephangarland/ghtorrent-pull-requests)
-Para este proyecto utilizamos el dataset que contiene los comentarios de github pull requests.
+We found our dataset in [Kaggle] (https://www.kaggle.com/stephangarland/ghtorrent-pull-requests)
+For this project we use the dataset that contains the github pull requests comments.
 
 ## Extracting important data
-Lo primero que debemos hacer es extraer la columna del .csv que tiene la data que necesitamos
-```python
+The first thing we must do is extract the column from the .csv that has the data we need
+python
 import csv
 from datetime import datetime
 
-start_time = datetime.now()
+start_time = datetime.now ()
 
-with open(<<Path del .csv>>, 'rb') as f:
-    reader = csv.reader(f)
-    next(reader)  # Ignoramos nombre de la columna
+with open (<< Path of the .csv >>, 'rb') as f:
+    reader = csv.reader (f)
+    next (reader) # We ignore column name
 
-    with open(<<Path y nombre del .txt donde queremos guardar la data>>, 'w') as nf:
+    with open (<< Path and name of the .txt where we want to save the data >>, 'w') as nf:
         for row in reader:
-            nf.write(row[0]+' ')
+            nf.write (row [0] + '')
 
-end_time = datetime.now()
-print('Duration: {}'.format(end_time - start_time))
-```
+end_time = datetime.now ()
+print ('Duration: {}'. format (end_time - start_time))
+`` ''
 
-Este codigo puede ser adquirrido de los archivos subidos al portal.
+This code can be acquired from the files uploaded to the portal.
 
 -------
 
-## Cleaning data 🧹
-Para limpiar la data, debemos ejecutar el archivo de java llamado CleaningData, adjunto en los archivos subidos al portal, solo debemos cambiar algunas rutas.
+## Cleaning data   
+To clean the data, we must execute the java file called CleaningData, attached to the files uploaded to the portal, we only have to change some routes.
 
-```java
-43          try {
-44              File fichero = new File(<<Lugar donde queremos guardar la data limpia>>);
-45              fw = new FileWriter(fichero);
-46              bw = new BufferedWriter(fw);
-```
+java
+43 try {
+44 File file = new File (<< Place where we want to save the clean data >>);
+45 fw = new FileWriter (file);
+46 bw = new BufferedWriter (fw);
+`` ''
 
-```java
-51      try {
-52          BufferedReader br = new BufferedReader(new FileReader(<<Path del archivo donde almacenamos la data desde el script de python>>));
-53          long total = 0;
-54          while ((thisLine = br.readLine()) != null) {
-```
-```java
-115    public static ArrayList<String> readPalabras() {
-116        String fichero = "<<Path al archivo que contiene stopwords>>";
-117        ArrayList<String> deleteWords = new ArrayList();
-118        int cont = 0;
-```
+java
+51 try {
+52 BufferedReader br = new BufferedReader (new FileReader (<< Path of the file where we store the data from the python script >>));
+53 total long = 0;
+54 while ((thisLine = br.readLine ())! = Null) {
+`` ''
+java
+115 public static ArrayList <String> readWords () {
+116 String file = "<< Path to the file that contains stopwords >>";
+117 ArrayList <String> deleteWords = new ArrayList ();
+118 int cont = 0;
+`` ''
 ----
 
-## Hadoop MAP&REDUCE
+## Hadoop MAP & REDUCE
 ---
 ### Configuration Files
 
-1 - Navegar a la carpeta 
-```bash 
-$ cd /Project_Hadoop/Project_Hadoop/Config/
-```
-Dentro del archivo subido al portal donde encontraremos los archivos ```core-site.mxl hdfs-site.xml yarn-site.xml mapred-site.xml```
+1 - Navigate to the folder
+bash
+$ cd / Project_Hadoop / Project_Hadoop / Config /
+`` ''
+Inside the file uploaded to the portal where we will find the files `` `core-site.mxl hdfs-site.xml yarn-site.xml mapred-site.xml```
 
-2 - Seleccionar y copiar los cuatro archivos.
+2 - Select and copy the four files.
 
-3 - Luego navegar en su sistema de archivos local a la carpeta donde tiene instalada su distribucion de hadoop, ingresar al directory donde se encuentran sus archivos de configuracion e.g.
-```bash
-$ cd home/user/hadoop-3.2.2/etc/hadoop/
-``` 
-4 - Pegar los archivos de configuracion copiados anteriormente. 
+3 - Then navigate in your local file system to the folder where you have your hadoop distribution installed, enter the directory where your configuration files are located e.g.
+bash
+$ cd home / user / hadoop-3.2.2 / etc / hadoop /
+`` ''
+4 - Paste the previously copied configuration files.
 
-### Recordatorio Importante!
+### Important Reminder!
 
-> Los archivos ```yarn-site.xml``` y ```mapred-site.xml``` estan configurados asumiendo que su sistema cuenta con 16GB libres de espacio de almacenamiento.
+> The files `` `yarn-site.xml``` and` `` mapred-site.xml``` are configured assuming that your system has 16GB of free storage space.
 
-> Para que un programa de mapeo & reducción tenga tiempos de ejecución eficiente, la proporción de la memoria que se le asigna al trabajo de reducción debe ser el doble que la del trabajo de mapeo.
+> For a reduction & mapping program to have efficient execution times, the proportion of memory allocated to the reduction job must be twice that of the mapping job.
 
-> La cantidad de memoria que se le asigna a heap de Java, es recomendable que sea de 1GB menos que lo que se le asignó al mapeo y a la reduccion(ya configurado en los archivos brindados).
+> The amount of memory that is assigned to Java heap, it is recommended that it be 1GB less than what was assigned to the mapping and the reduction (already configured in the provided files).
 
 ---
 
-### Ejecucion de MapReduce
+### Execution of MapReduce
 
-#### Start-up de HDFS
-Navegue a la carpeta sbin localizado dentro de su distribucion de hadoop
-```bash
+#### HDFS Start-up
+Navigate to the sbin folder located within your hadoop distribution
+bash
 $ cd /home/user/hadoop-3.2.2/sbin/
-```
+`` ''
 
-Para iniciar Hadoop Namenodes, Datanodes, Secondary Namenodes, ResourcesManagers y NodeManagers corra el siguiente comando: 
-```bash
+To start Hadoop Namenodes, Datanodes, Secondary Namenodes, ResourcesManagers and NodeManagers run the following command:
+bash
 $ ./start-all.sh
-```
-#### Ejecucion de WordCount
-Creamos la carpeta donde estará localizado el input en el HDFS (Hadoop
+`` ''
+#### Execution of WordCount
+We create the folder where the input will be located in the HDFS (Hadoop
 Distributed File System):
-```bash
-$ hadoop fs -mkdir /WordCount
-```
-Luego creamos la carpeta donde guardaremos los inputs
-```bash
-$ hadoop fs -mkdir /WordCount/Input
-```
-Despues agregamos el input file con la data limpiada que obtuvimos en los pasos anteriores "Extracting important Data" y "Cleaning Data", con el siguiente comando:
-```bash
-$ hadoop fs -put <<Direccion del archivo limpio>> <<Direccion de HDFS>>
+bash
+$ hadoop fs -mkdir / WordCount
+`` ''
+Then we create the folder where we will save the inputs
+bash
+$ hadoop fs -mkdir / WordCount / Input
+`` ''
+Then we add the input file with the cleaned data that we obtained in the previous steps "Extracting important Data" and "Cleaning Data", with the following command:
+bash
+$ hadoop fs -put << Address of clean file >> << Address of HDFS >>
 
 e.g. :
-$ hadoop fs -put /home/user/hadoop/cleanData.txt /WordCount/Input
-```
+$ hadoop fs -put /home/user/hadoop/cleanData.txt / WordCount / Input
+`` ''
 
-Para comenzar el mappeo y el reduce, corra el siguiente comando: 
-```bash
-$ hadoop jar <<Direccion de .jar>> <<Nombre de JavaClass>> <<HDFS Input File>> <<HDFS Output File>>
+To start mapping and reduce, run the following command:
+bash
+$ hadoop jar << Address of .jar >> << JavaClass Name >> << HDFS Input File >> << HDFS Output File >>
 
 e.g. :
-$ hadoop jar /home/user/Project_Hadoop/WordCount/WordCountJAR.jar WordCount /WordCount/Input/cleanData.txt /WordCount/Output
-```
+$ hadoop jar /home/user/Project_Hadoop/WordCount/WordCountJAR.jar WordCount /WordCount/Input/cleanData.txt / WordCount / Output
+`` ''
 
-Finalmente pasaremos el Output File generado por Hadoop al finalizar el proceso de MapReduce a nuestro sistema de archivos local, ejecutando el siguiente comando
-```bash
-$ hadoop fs -get <<Path HDFS de Outputput File>> <<Path en el localfilesystem donde queremos guardar el output file>>
+Finally we will pass the Output File generated by Hadoop at the end of the MapReduce process to our local file system, executing the following command
+bash
+$ hadoop fs -get << HDFS Path of Outputput File >> << Path in the localfilesystem where we want to save the output file >>
 
-e.g.:
-$ hadoop fs -get /WordCount/Output/part-r-00000.txt /home/user/Project_Hadoop
-```
+e.g .:
+$ hadoop fs -get /WordCount/Output/part-r-00000.txt / home / user / Project_Hadoop
+`` ''
 
-#### Ejecucion de WordCount2Freq
-Creamos la carpeta donde estará localizado el input en el HDFS (Hadoop
+#### Execution of WordCount2Freq
+We create the folder where the input will be located in the HDFS (Hadoop
 Distributed File System):
-```bash
-$ hadoop fs -mkdir /WordCount2Freq
-```
-Luego creamos la carpeta donde guardaremos los inputs
-```bash
-$ hadoop fs -mkdir /WordCount2Freq/Input
-```
-Despues agregamos el input file con la data limpiada que obtuvimos en los pasos posteriores "Extracting important Data" y "Cleaning Data", con el siguiente comando:
-```bash
-$ hadoop fs -put <<Direccion del archivo limpio>> <<Direccion de HDFS>>
+bash
+$ hadoop fs -mkdir / WordCount2Freq
+`` ''
+Then we create the folder where we will save the inputs
+bash
+$ hadoop fs -mkdir / WordCount2Freq / Input
+`` ''
+Then we add the input file with the cleaned data that we obtained in the subsequent steps "Extracting important Data" and "Cleaning Data", with the following command:
+bash
+$ hadoop fs -put << Address of clean file >> << Address of HDFS >>
 
 e.g. :
-$ hadoop fs -put /home/user/hadoop/cleanData.txt /WordCount2Freq/Input
-```
+$ hadoop fs -put /home/user/hadoop/cleanData.txt / WordCount2Freq / Input
+`` ''
 
-Para comenzar el mappeo y el reduce, corra el siguiente comando: 
-```bash
-$ hadoop jar <<Direccion de .jar>> <<Nombre de JavaClass>> <<HDFS Input File>> <<HDFS Output File>>
+To start mapping and reduce, run the following command:
+bash
+$ hadoop jar << Address of .jar >> << JavaClass Name >> << HDFS Input File >> << HDFS Output File >>
 
 e.g. :
-$ hadoop jar /home/user/Project_Hadoop/WordCount2Freq/WC2Freq.jar WordCount /WordCount2Freq/Input/cleanData.txt /WordCount2Freq/Output
-```
+$ hadoop jar /home/user/Project_Hadoop/WordCount2Freq/WC2Freq.jar WordCount /WordCount2Freq/Input/cleanData.txt / WordCount2Freq / Output
+`` ''
 
-Finalmente pasaremos el Output File generado por Hadoop al finalizar el proceso de MapReduce a nuestro sistema de archivos local, ejecutando el siguiente comando
-```bash
-$ hadoop fs -get <<Path HDFS de Outputput File>> <<Path en el localfilesystem donde queremos guardar el output file>>
+Finally we will pass the Output File generated by Hadoop at the end of the MapReduce process to our local file system, executing the following command
+bash
+$ hadoop fs -get << HDFS Path of Outputput File >> << Path in the localfilesystem where we want to save the output file >>
 
-e.g.:
-$ hadoop fs -get /WordCount2Freq/Output/part-r-00000.txt /home/user/Project_Hadoop
-```
+e.g .:
+$ hadoop fs -get /WordCount2Freq/Output/part-r-00000.txt / home / user / Project_Hadoop
+`` ''
 ---
 
-## Sorting data by descending frecuency orden 
+## Sorting data by descending frequency order
 ### 1 Word Frequency
 
-Utilizando los Output Files copiados de HDFS de WordCount y WordCount2Freq(part-r-00000.txt), ejecutamos los siguientes comandos: 
-```bash
-$ sort -k 2nr <<Path del txt que contiene el word count>> -o <<Nombre del nuevo file con resultados ordenados>>
+Using the copied HDFS Output Files from WordCount and WordCount2Freq (part-r-00000.txt), we execute the following commands:
+bash
+$ sort -k 2nr << Path of the txt that contains the word count >> -o << Name of the new file with ordered results >>
 
-e.g.:
+e.g .:
 $ sort -k 2nr /home/user/Project_Hadoop/part-r-00000.txt -o /home/user/Project_Hadoop/SortedWordCount.txt
-```
+`` ''
 ### 2 Word Frequency
-```bash
-$ sort -k 4nr <<Path del txt que contiene el word count>> -o <<Nombre del nuevo file con resultados ordenados>>
+bash
+$ sort -k 4nr << Path of the txt that contains the word count >> -o << Name of the new file with ordered results >>
 
-e.g.:
+e.g .:
 $ sort -k 4nr /home/user/Project_Hadoop/part-r-00000.txt -o /home/user/Project_Hadoop/SortedWordCount2Freq.txt
-```
-Despues de estos dos pasos, nuestros archivos ya estan totalmente listos! Con un simple cat sortedfile.txt podremos ver la informacion sorteada en orden de mayor a menor por frecuencia.
-```bash
+`` ''
+After these two steps, our files are completely ready! With a simple cat sortedfile.txt we can see the information sorted in order from highest to lowest by frequency.
+bash
 $ cat /home/user/Project_Hadoop/SorteWordCount.txt
-```
+`` ''
 
--sort : El comando de sorting.
--r : Para descending order.
--k : Para sortear por una columna en especifico.
-2n : Para sortear por la segunda columna.
-n  : Para indicar que es un valor numerico.
+-sort: The sorting command.
+-r: For descending order.
+-k: To sort by a specific column.
+2n: To draw for the second column.
+n: To indicate that it is a numeric value.
 
 -------
 
-## Frecuencia de las palabras 
-### Para 1 Word frequency & 2 Words frequency 
-Si deseamos obtener la frecuencia de las palabras o pares de palabras, debemos ejecutar el archivo de java llamado CountLines, adjunto en los archivos subidos al portal, solo debemos cambiar algunas rutas.
+## Frequency of words
+### For 1 Word frequency & 2 Words frequency
+If we want to obtain the frequency of the words or pairs of words, we must execute the java file called CountLines, attached to the files uploaded to the portal, we only have to change some routes.
 
-```java
-23    public static void main(String[] args) throws FileNotFoundException, IOException {
-24        // TODO code application logic here
-25        File f1 = new File("<<Path del archivo que contiene el resultado del word count>>"); 
-26        int linecount = 0;
-27        File f2 = new File("<<Path del archivo que contiene el resultado del 2 words count>>"); 
-28        int linecount2 = 0;
-29        FileReader fr = new FileReader(f1);
-```
+java
+23 public static void main (String [] args) throws FileNotFoundException, IOException {
+24 // TODO code application logic here
+25 File f1 = new File ("<< Path of the file that contains the result of the word count >>");
+26 int linecount = 0;
+27 File f2 = new File ("<< Path of the file that contains the result of the 2 words count >>");
+28 int linecount2 = 0;
+29 FileReader fr = new FileReader (f1);
+`` ''
 
-Este codigo puede ser adquirrido de los archivos subidos al portal.
+This code can be acquired from the files uploaded to the portal.
 
 ---------
